@@ -102,3 +102,13 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Ignore local config files
+/local
+/config/development.json
+/config/production.json
+/tunnel.sh
+/nodemon.json
+.DS_Store
+/.idea
+/app.yaml

@@ -1,0 +1,15 @@
+runtime: nodejs14
+env: flex
+
+handlers:
+    - url: .*
+      script: auto
+      redirect_http_response_code: 301
+      secure: always
+
+instance_class: F1
+automatic_scaling:
+    min_instances: 1
+    max_instances: 5
+    max_concurrent_requests: 50
+    target_cpu_utilization: 0.90

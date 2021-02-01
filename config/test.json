@@ -1,0 +1,24 @@
+{
+    "logging": {
+        "level": "debug",
+        "prettyPrint": true
+    },
+    "webhooks": {
+        "baseUrl": "https://some-webhook-tunnel.ngrok.io",
+        "token": "change-me-and-keep-secret"
+    },
+    "skills": {
+        "seestadtbot": {
+            "skillId": "amzn1.ask.skill.889266dc-f937-4f29-a1e2-cf8e417ddc02"
+        }
+    },
+    "wienerlinien": {
+        "monitor": "https://www.wienerlinien.at/ogd_realtime/monitor",
+        "elevator": "https://www.wienerlinien.at/ogd_realtime/trafficInfoList?name=aufzugsinfo"
+    },
+    "matomo": {
+        "siteId": 1,
+        "trackerUrl": "https://example.com/matomo.php",
+        "salt": "i-am-a-secret-user-id-salt"
+    }
+}
