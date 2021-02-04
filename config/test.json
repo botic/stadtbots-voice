@@ -16,6 +16,10 @@
         "monitor": "https://www.wienerlinien.at/ogd_realtime/monitor",
         "elevator": "https://www.wienerlinien.at/ogd_realtime/trafficInfoList?name=aufzugsinfo"
     },
+    "stadtkatalog": {
+        "blacklist": ["100267", "100431", "100075"],
+        "vagueTerms": ["seestadt", "aspern"]
+    },
     "matomo": {
         "siteId": 1,
         "trackerUrl": "https://example.com/matomo.php",

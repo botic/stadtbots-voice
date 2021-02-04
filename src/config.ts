@@ -110,6 +110,18 @@ const config = convict({
             arg: "wienerlinien_elevator",
         }
     },
+    stadtkatalog: {
+        blacklist: {
+            doc: "IDs of StadtKatalog entries to filter from Voice-based results.",
+            format: Array,
+            default: [],
+        },
+        vagueTerms: {
+            doc: "Too vague terms which should not be used for search queries.",
+            format: Array,
+            default: ["seestadt", "aspern"],
+        },
+    },
     matomo: {
         doc: "Tracking configuration for Matomo.",
         format: "matomo-tracker",

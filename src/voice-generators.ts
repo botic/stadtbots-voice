@@ -90,6 +90,7 @@ export function generateOpeningHours(entryData: EntryData): string {
             texts.push(`Es sind keine Öffnungszeiten für ${escapeXml(entryData.name)} hinterlegt.`);
         }
     } else {
+        texts.push(`${escapeXml(entryData.name)} ist derzeit ${hours.isOpenAt(new Date()) ? 'geöffnet' : 'geschlossen'}.`)
         const foldedHours = hours
             .fold({
                 closedPlaceholder: "geschlossen",
@@ -105,7 +106,7 @@ export function generateOpeningHours(entryData: EntryData): string {
             .replace(/\n/g, ". ")
         ;
 
-        texts.push(`Öffnungszeiten für ${escapeXml(entryData.name)}: ${escapeXml(foldedHours)}.`);
+        texts.push(`Die weiteren Öffnungszeiten sind: ${escapeXml(foldedHours)}.`);
         if(entryData.hoursRemark !== "") {
             texts.push(`Hinweis: ${escapeXml(entryData.hoursRemark)}`);
         }

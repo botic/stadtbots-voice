@@ -2,6 +2,10 @@ import {GeoFence} from "../types/stadtkatalog";
 import {getEntry, searchFulltext} from "@stadtkatalog/stadtkatalog";
 import {EntryData, SortField, SortOrder} from "@stadtkatalog/stadtkatalog/lib/types";
 import {Slot} from "ask-sdk-model";
+import config from "../config";
+
+const BLACKLIST = config.get("stadtkatalog.blacklist");
+const VAGUE_TERMS = config.get("stadtkatalog.vagueTerms").map((term: string) => term.toLocaleLowerCase());
 
 /**
  * Searches the StadtKatalog for the given `shopName` slot.
@@ -24,9 +28,18 @@ export async function shopNameSlotToEntryData(slot: Slot, geoFence: GeoFence): P
     }
 
     if (slot.value !== undefined) {
-        const results = await searchFulltext(slot.value, SortField.relevance, SortOrder.desc, 1, 0, geoFence);
-        if (results?.hits.length === 1) {
-            return results.hits[0]?.data || null;
+        if (VAGUE_TERMS.includes(slot.value.toLocaleLowerCase())) {
+            // fixme: this should result in a follow-up question for the slot value!
+            return null;
+        }
+
+        const searchResult = await searchFulltext(slot.value, SortField.relevance, SortOrder.desc, 5, 0, geoFence);
+
+        if (searchResult) {
+            const filteredHits = searchResult.hits.filter(hit => !BLACKLIST.includes(hit.id));
+            if (filteredHits.length >= 1) {
+                return filteredHits[0]?.data || null;
+            }
         }
 
         return null;
