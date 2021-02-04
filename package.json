@@ -8,6 +8,7 @@
         "dev": "nodemon",
         "build": "tsc -p ."
     },
+    "private": true,
     "repository": {
         "type": "git",
         "url": "git+https://botic@github.com/botic/stadtbots-voice.git"
@@ -44,5 +45,8 @@
         "joi": "^17.3.0",
         "pino": "^6.11.0",
         "pino-pretty": "^4.4.0"
+    },
+    "engines": {
+        "node": ">=14.0.0"
     }
 }
