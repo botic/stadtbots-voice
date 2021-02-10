@@ -48,17 +48,28 @@ const init = async () => {
         method: "POST",
         path: `/${webhooksToken}/seestadtbot`,
         handler: async (request) => {
-            const requestEnvelope = request.payload as RequestEnvelope;
-            const textBody = JSON.stringify(requestEnvelope);
+            const payload = request.payload as Buffer;
+            const textBody = payload.toString("utf8");
             try {
-                await new SkillRequestSignatureVerifier().verify(textBody, request.headers);
+                await new SkillRequestSignatureVerifier().verify(textBody, request.raw.req.headers);
                 await new TimestampVerifier().verify(textBody);
             } catch (err) {
                 log.error(`Invalid request: Could not verify ${textBody}`);
                 return Boom.internal(`Could not verify request.`);
             }
 
-            return SeestadtBotSkill.invoke(requestEnvelope);
+            try {
+                return SeestadtBotSkill.invoke(JSON.parse(textBody));
+            } catch (err) {
+                log.error(`Invalid request body: Could not parse JSON from ${textBody}`);
+                return Boom.badRequest(`Invalid JSON.`);
+            }
+        },
+        options: {
+            payload: {
+                parse: false,
+                output: "data",
+            },
         },
     });
 
