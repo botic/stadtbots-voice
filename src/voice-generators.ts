@@ -76,6 +76,38 @@ export function generateStationInfo(station: StationKey, stationInfo: Map<LineKe
 }
 
 /**
+ * Transforms a StadtKatalog entry into a speakable string.
+ * @param entryData
+ */
+export function generateShopInformation(entryData: EntryData): string {
+    const addressPrefix = /(Stra(ss|ß)e|Gasse)/i.test(entryData.address)
+        ? "in der"
+        : /(Platz|Eck)/i.test(entryData.address)
+            ? "am"
+            : "bei"
+
+    const hasDescription = entryData.description !== "";
+
+    const texts = [
+        hasDescription ? `${escapeXml(entryData.name)}: ${escapeXml(entryData.description)}.` : "",
+        `${escapeXml(entryData.label || entryData.name)} befindet sich ${addressPrefix} ${escapeXml(entryData.address)}.`
+    ];
+
+    const hours = new OpeningHours(entryData.hours, "Europe/Vienna");
+    if (hours.isUnknown() && entryData.hoursRemark !== "") {
+            texts.push(`Ein Hinweis zu den Öffnungezeiten: ${escapeXml(entryData.hoursRemark)}`);
+    } else {
+        texts.push(`Derzeit hat ${escapeXml(entryData.label || entryData.name)} ${hours.isOpenAt(new Date()) ? 'geöffnet' : 'geschlossen'}.`)
+        if(entryData.hoursRemark !== "") {
+            texts.push(`Hinweis: ${escapeXml(entryData.hoursRemark)}`);
+        }
+    }
+
+    return texts.join(" ").trim();
+}
+
+
+/**
  * Transforms a StadtKatalog entry's opening hours into a speakable string.
  * @param entryData
  * @see https://www.npmjs.com/package/@stadtkatalog/openinghours

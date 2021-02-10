@@ -31,6 +31,7 @@ import {shopNameSlotToEntryData} from "../services/stadtkatalog";
 
 import {
     generateOpeningHours,
+    generateShopInformation,
     generateStationInfo,
 } from "../voice-generators";
 import {trackAlexa} from "../utils";
@@ -84,6 +85,32 @@ const OpeningHoursIntent : RequestHandler = {
         return handlerInput.responseBuilder
             .speak(text)
             .withSimpleCard("Öffnungszeiten", text)
+            .getResponse();
+    }
+};
+
+const ShopIntentHandler : RequestHandler = {
+    canHandle(handlerInput : HandlerInput) : boolean {
+        return handlerInput.requestEnvelope.request.type === "IntentRequest"
+            && handlerInput.requestEnvelope.request.intent.name === "ShopIntent";
+    },
+    async handle(handlerInput: HandlerInput): Promise<Response> {
+        const entryData = await shopNameSlotToEntryData(
+            getSlot(handlerInput.requestEnvelope, "shopName"),
+            GeoFence.Seestadt,
+        );
+
+        trackAlexa(
+            handlerInput.requestEnvelope.session?.user.userId || "unknown",
+            "Query",
+            "StadtKatalog",
+            "Results",
+            entryData ? 1 : 0,
+        );
+
+        const text = entryData ? generateShopInformation(entryData) : `Leider konnte ich nichts dazu finden.`;
+        return handlerInput.responseBuilder
+            .speak(text)
             .getResponse();
     }
 };
@@ -238,6 +265,7 @@ const skill = SkillBuilders
         LaunchRequestHandler,
         OpeningHoursIntent,
         StationIntentHandler,
+        ShopIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,

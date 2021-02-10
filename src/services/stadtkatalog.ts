@@ -33,7 +33,14 @@ export async function shopNameSlotToEntryData(slot: Slot, geoFence: GeoFence): P
             return null;
         }
 
-        const searchResult = await searchFulltext(slot.value, SortField.relevance, SortOrder.desc, 5, 0, geoFence);
+        const searchResult = await searchFulltext(
+            slot.value,
+            SortField.relevance,
+            SortOrder.desc,
+            5,
+            0,
+            geoFence
+        );
 
         if (searchResult) {
             const filteredHits = searchResult.hits.filter(hit => !BLACKLIST.includes(hit.id));

@@ -131,7 +131,9 @@ const config = convict({
 
 // Load the current environment configuration.
 const env = config.get("env");
-config.loadFile(`${__dirname}/../config/${env}.json`);
+const configFile = `${__dirname}/../config/${env}.json`;
+config.loadFile(configFile);
 config.validate({allowed: "strict"});
+console.log(`Loaded configuration from ${configFile}`);
 
 export default config;
