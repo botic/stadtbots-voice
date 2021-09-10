@@ -15,7 +15,6 @@ import {getLogger} from "./logging";
 const log = getLogger();
 
 import {skill as SeestadtBotSkill} from "./alexa-skills/seestadtbot";
-import {RequestEnvelope} from "ask-sdk-model";
 
 const init = async () => {
     const server = new Hapi.Server({

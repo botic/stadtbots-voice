@@ -58,6 +58,7 @@ const LaunchRequestHandler : RequestHandler = {
             .speak(`Hallo vom ${PHONEME_SEESTADT_BOT}! ${help}`)
             .reprompt(`Servus noch einmal! Ich bin der ${PHONEME_SEESTADT_BOT}! ${help}`)
             .withSimpleCard("Seestadt.bot", help)
+            .withShouldEndSession(false)
             .getResponse();
     },
 };
@@ -85,6 +86,7 @@ const OpeningHoursIntent : RequestHandler = {
         return handlerInput.responseBuilder
             .speak(text)
             .withSimpleCard("Öffnungszeiten", text)
+            .withShouldEndSession(true)
             .getResponse();
     }
 };
@@ -111,6 +113,7 @@ const ShopIntentHandler : RequestHandler = {
         const text = entryData ? generateShopInformation(entryData) : `Leider konnte ich nichts dazu finden.`;
         return handlerInput.responseBuilder
             .speak(text)
+            .withShouldEndSession(true)
             .getResponse();
     }
 };
@@ -160,6 +163,7 @@ const StationIntentHandler : RequestHandler = {
             return handlerInput.responseBuilder
                 .speak("Leider funktioniert der Server der Wiener Linien gerade nicht.")
                 .withSimpleCard("Fehler", "Die Wiener Linien antworten nicht.")
+                .withShouldEndSession(true)
                 .getResponse();
         } else {
             trackAlexa(
@@ -173,6 +177,7 @@ const StationIntentHandler : RequestHandler = {
             return handlerInput.responseBuilder
                 .speak(answer.text)
                 .withSimpleCard(answer.card.title, answer.card.content)
+                .withShouldEndSession(true)
                 .getResponse();
         }
     },
@@ -190,13 +195,14 @@ const HelpIntentHandler : RequestHandler = {
             "Help",
         );
 
-        const speechText = "Du kannst mich nach den Öffnungszeiten eines Geschäfts fragen. " +
+        const speechText = "Du kannst mich dem Stichwort Öffnungszeiten nach den Öffnungszeiten von Geschäften fragen. " +
             "Ich weiß auch die Abfahrtszeiten der Öffis in der Seestadt. " +
-            "Frag mich dazu einfach, wann der nächst Bus oder die nächste U-Bahn fährt.";
+            "Frag mich dazu einfach: Wann der nächst Bus? Oder wann fährt die nächste U-Bahn?";
 
         return handlerInput.responseBuilder
             .speak(speechText)
             .withSimpleCard("Hilfe", speechText)
+            .withShouldEndSession(false)
             .getResponse();
     },
 };
@@ -241,6 +247,7 @@ const ErrorHandler : ErrorHandler = {
         return handlerInput.responseBuilder
             .speak("Hoppala! Kannst du das noch einmal sagen?")
             .reprompt("Entschuldige nochmals, aber ich habe dich nicht verstanden. Kannst du das wiederholen?")
+            .withShouldEndSession(false)
             .getResponse();
     },
 };
