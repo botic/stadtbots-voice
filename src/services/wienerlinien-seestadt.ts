@@ -1,14 +1,8 @@
-import {
-    LineKey,
-    MultiModalMapping,
-    StationKey,
-    StationLineMapping,
-    VehicleType,
-    WayTime,
-} from "../types/wienerlinien";
+import {LineKey, MultiModalMapping, StationKey, StationLineMapping, VehicleType, WayTime,} from "../types/wienerlinien";
 import {Slot} from "ask-sdk-model";
 
 import {getLogger} from "../logging";
+
 const log = getLogger();
 
 /**
@@ -46,6 +40,8 @@ export const SUPPORTED_STATIONS = [
     StationKey.ASP,
     StationKey.HAU,
     StationKey.NOR,
+    StationKey.IBS,
+    StationKey.KRG,
     StationKey.SEE,
     StationKey.CTS,
     StationKey.MTP,
@@ -87,6 +83,13 @@ STATION_TO_LINES[StationKey.HAU] = [
 ];
 STATION_TO_LINES[StationKey.NOR] = [
     { line: LineKey.WL_U2 , rbls: ["4278", "4275"] },
+    { line: LineKey.WL_84A, rbls: ["3339"] },
+];
+STATION_TO_LINES[StationKey.IBS] = [
+    { line: LineKey.WL_84A, rbls: ["3907", "3905"] },
+];
+STATION_TO_LINES[StationKey.KRG] = [
+    { line: LineKey.WL_84A, rbls: ["3904", "3906"] },
 ];
 STATION_TO_LINES[StationKey.SEE] = [
     { line: LineKey.WL_U2 , rbls: ["4277", "4276"] },
@@ -159,6 +162,8 @@ export function getStationName(station: StationKey) {
         case StationKey.ASP: return "Aspernstraße";
         case StationKey.HAU: return "Hausfeldstraße";
         case StationKey.NOR: return "Aspern Nord";
+        case StationKey.IBS: return "Ilse-Buck-Straße";
+        case StationKey.KRG: return "Käthe-Recheis-Gasse";
         case StationKey.SEE: return "Seestadt";
         case StationKey.CTS: return "Christine-Touaillon-Straße";
         case StationKey.MTP: return "Maria-Trapp-Platz";
@@ -186,6 +191,10 @@ function extractStation(text: string, enableSeestadt= true): StationKey|null {
         return StationKey.MTP;
     } else if (/^christine[- ]?touaillon([- ]?(gasse|stra(ss|ß)e))?$/i.test(text)) {
         return StationKey.CTS;
+    } else if (/^ilse[ -]br?uck([ -]stra(ss|ß)e)?$/i.test(text)) {
+        return StationKey.IBS;
+    } else if (/^k[äae]th?e[ -]r[äe]chei[sß]([ -]ga(ss|ß)e)?$/i.test(text)) {
+        return StationKey.KRG;
     } else if (enableSeestadt && /^seestadt$/i.test(text)) {
         return StationKey.SEE;
     }

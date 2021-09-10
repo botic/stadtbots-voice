@@ -166,7 +166,7 @@ export async function getElevatorInfoText(rbls: string[]): Promise<ElevatorInfo[
  * @see https://twitter.com/botic/status/1133286469630668801
  */
 export function improveTowards(str: string): string {
-    return str.replace(/ U$/, "")
+    return str.replace(/ S?U$/, "")
         .replace(/ÖFFIS +NÜTZEN,/, "Karlsplatz")
         .replace(/KLIMA +SCHÜTZEN/, "Karlsplatz")
         .replace("KARLSPLATZ", "Karlsplatz")

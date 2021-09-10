@@ -16,6 +16,8 @@ export enum StationKey {
     ASP = "ASP",
     HAU = "HAU",
     NOR = "NOR",
+    IBS = "IBS",
+    KRG = "KRG",
     SEE = "SEE",
     CTS = "CTS",
     MTP = "MTP",
