@@ -1,7 +1,7 @@
 {
     "name": "stadtbots-voice",
-    "version": "0.1.0",
-    "description": "The Stadt.bot Voice Interface.",
+    "version": "1.0.0",
+    "description": "The Stadt.bot voice interface.",
     "main": "index.js",
     "scripts": {
         "start": "node ./dist/index.js",
@@ -11,7 +11,7 @@
     "private": true,
     "repository": {
         "type": "git",
-        "url": "git+https://botic@github.com/botic/stadtbots-voice.git"
+        "url": "git+https://github.com/botic/stadtbots-voice.git"
     },
     "author": "Philipp Naderer-Puiu",
     "license": "Apache-2.0",
