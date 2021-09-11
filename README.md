@@ -12,7 +12,7 @@ Users can ask the following questions:
 
 * _Alexa, frag Seestadt.bot nach den Öffnungszeiten vom Leo._
 * _Alexa, frag Seestadt.bot wann der nächste Bus kommt._
-* _Alexa, frag Seestadt.bot wann die U-Bahn fährt._
+* _Alexa, frag Seestadt.bot wann die U2 fährt._
 * _Alexa, frag Seestadt.bot wann der nächste Bus bei der Johann-Kutschera-Gasse fährt._
 
 ## General
@@ -33,7 +33,9 @@ but the implementation has not started yet. Stadtbots use the following Open Dat
 
 ## License
 
-Apache 2.0<br>Before any contribution contact Philipp Naderer-Puiu.
+Apache 2.0
+
+Before any contribution or pull request contact Philipp Naderer-Puiu.
 
 [Seestadt.bot]: https://seestadt.bot/
 [Aspern Seestadt]: https://www.aspern-seestadt.at/en/
