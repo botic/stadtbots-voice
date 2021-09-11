@@ -16,6 +16,7 @@ import {getLogger} from "../logging";
 import {
     slotToStation,
     slotToVehicleType,
+    seestadtLineSorter,
     BUS_LINES,
     STATION_TO_LINES,
     UBAHN_LINES,
@@ -45,8 +46,8 @@ const LaunchRequestHandler : RequestHandler = {
     },
     handle(handlerInput : HandlerInput) : Response {
         const help = "Du kannst mich nach den Öffnungszeiten von Geschäften fragen. " +
-            "Außerdem kenne ich alle Öffi-Abfahrtszeiten. " +
-            "Frag mich einfach, wann der nächste Bus oder die nächste U-Bahn fährt.";
+            "Außerdem kenne ich die Öffi-Abfahrtszeiten. " +
+            "Frag mich einfach, wann der nächste Bus oder die nächste U2 fährt.";
 
         trackAlexa(
             handlerInput.requestEnvelope.session?.user.userId || "unknown",
@@ -126,8 +127,8 @@ const StationIntentHandler : RequestHandler = {
     async handle(handlerInput: HandlerInput): Promise<Response> {
         const vehicleTypeSlot = getSlot(handlerInput.requestEnvelope, "vehicleType");
         const vehicleType = vehicleTypeSlot
-            ? (slotToVehicleType(vehicleTypeSlot) || VehicleType.BUS)
-            : VehicleType.BUS;
+            ? (slotToVehicleType(vehicleTypeSlot) || null)
+            : null;
 
         const fallbackStation = vehicleType === VehicleType.BUS ? StationKey.HAP : StationKey.SEE;
 
@@ -173,7 +174,7 @@ const StationIntentHandler : RequestHandler = {
                 station,
             );
 
-            const answer = generateStationInfo(station, stationInfo);
+            const answer = generateStationInfo(station, seestadtLineSorter(stationInfo));
             return handlerInput.responseBuilder
                 .speak(answer.text)
                 .withSimpleCard(answer.card.title, answer.card.content)
@@ -197,7 +198,7 @@ const HelpIntentHandler : RequestHandler = {
 
         const speechText = "Du kannst mich dem Stichwort Öffnungszeiten nach den Öffnungszeiten von Geschäften fragen. " +
             "Ich weiß auch die Abfahrtszeiten der Öffis in der Seestadt. " +
-            "Frag mich dazu einfach: Wann der nächst Bus? Oder wann fährt die nächste U-Bahn?";
+            "Frag mich dazu einfach: Wann der nächst Bus? Oder wann fährt die nächste U2?";
 
         return handlerInput.responseBuilder
             .speak(speechText)

@@ -1,4 +1,12 @@
-import {LineKey, MultiModalMapping, StationKey, StationLineMapping, VehicleType, WayTime,} from "../types/wienerlinien";
+import {
+    LineKey,
+    MonitorLine,
+    MultiModalMapping,
+    StationKey,
+    StationLineMapping,
+    VehicleType,
+    WayTime,
+} from "../types/wienerlinien";
 import {Slot} from "ask-sdk-model";
 
 import {getLogger} from "../logging";
@@ -70,10 +78,10 @@ STATION_TO_FLOTTE[StationKey.SEE] = ["10000"];
 export const STATION_TO_LINES = {} as StationLineMapping;
 STATION_TO_LINES[StationKey.ASP] = [
     { line: LineKey.WL_U2 , rbls: ["4251", "4272"] },
-    { line: LineKey.WL_93A, rbls: ["8054", "8054"] },
     { line: LineKey.WL_84A, rbls: ["8682"] },
-    { line: LineKey.WL_88A, rbls: ["8683", "8683"] },
     { line: LineKey.WL_26A, rbls: ["1024", "1052"] },
+    { line: LineKey.WL_93A, rbls: ["8054", "8054"] },
+    { line: LineKey.WL_88A, rbls: ["8683", "8683"] },
     { line: LineKey.WL_97A, rbls: ["8055", "8055"] },
     { line: LineKey.WL_98A, rbls: ["8682", "8682", "2823"] },
     { line: LineKey.WL_89A, rbls: ["8685", "8685"] },
@@ -272,4 +280,41 @@ export function slotToVehicleType(slot: Slot): VehicleType|null {
     }
 
     return null;
+}
+
+/**
+ * Returns the given station information as prioritized array.
+ * The main Seestadt lines U2 and 84A are selected before any other lines.
+ */
+export function seestadtLineSorter(stationInfo: Map<LineKey, MonitorLine[]>) {
+    const entries = [] as Array<[LineKey, MonitorLine[]]>;
+    for (const [line, monitor] of stationInfo.entries()) {
+        if (!SUPPORTED_LINES.includes(line)) {
+            continue;
+        }
+
+        entries.push([line, monitor]);
+    }
+
+    return entries.sort((a, b) => {
+        if (a[0] === b[0]) {
+            return 0;
+        } else if (a[0] === LineKey.WL_U2) {
+            return -1;
+        } else if (b[0] === LineKey.WL_U2) {
+            return 1;
+        } else if (a[0] === LineKey.WL_84A) {
+            return -1;
+        } else if (b[0] === LineKey.WL_84A) {
+            return 1;
+        } else {
+            if (a[0].length === b[0].length) {
+                // Just compare the raw line names
+                return a[0].localeCompare(b[0]);
+            } else {
+                // prefer shorter line names, e.g. U1 before 88B
+                return a[0].length - b[0].length;
+            }
+        }
+    });
 }

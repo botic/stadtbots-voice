@@ -1,14 +1,7 @@
 import {improveTowards} from "./services/wienerlinien";
 import {DualResponse} from "./types/skill-responses";
-import {
-    getStationName,
-    SUPPORTED_LINES,
-} from "./services/wienerlinien-seestadt";
-import {
-    LineKey,
-    MonitorLine,
-    StationKey,
-} from "./types/wienerlinien";
+import {getStationName} from "./services/wienerlinien-seestadt";
+import {LineKey, MonitorLine, StationKey,} from "./types/wienerlinien";
 import {OpeningHours} from "@stadtkatalog/openinghours";
 import {WeekdayFormat} from "@stadtkatalog/openinghours/lib/types";
 import {EntryData} from "@stadtkatalog/stadtkatalog/lib/types";
@@ -17,10 +10,10 @@ import {escapeXml} from "./utils";
 /**
  * Transforms a Wiener Linien real time response into a speakable text.
  * @param station the station's key
- * @param stationInfo real-time API information for the given station
+ * @param lineMonitors real-time API information for the given station
  */
-export function generateStationInfo(station: StationKey, stationInfo: Map<LineKey, MonitorLine[]>): DualResponse {
-    const singleLineStation = stationInfo.size === 1;
+export function generateStationInfo(station: StationKey, lineMonitors: Array<[LineKey, MonitorLine[]]>): DualResponse {
+    const singleLineStation = lineMonitors.length === 1;
     const textLines = [];
     const cardLines = [];
 
@@ -28,11 +21,7 @@ export function generateStationInfo(station: StationKey, stationInfo: Map<LineKe
         textLines.push(`Station ${getStationName(station)}`);
     }
 
-    for (const [line, monitor] of stationInfo.entries()) {
-        if (!SUPPORTED_LINES.includes(line)) {
-            continue;
-        }
-
+    for (const [line, monitor] of lineMonitors) {
         if (monitor.length === 0) {
             textLines.push(`Für die Linie ${line} sind keine Daten verfügbar.`);
             cardLines.push(`Für die Linie ${line} sind keine Daten verfügbar.`);
