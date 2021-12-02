@@ -103,7 +103,7 @@ STATION_TO_LINES[StationKey.SEE] = [
     { line: LineKey.WL_U2 , rbls: ["4277", "4276"] },
     { line: LineKey.WL_88A, rbls: ["3319"] },
     { line: LineKey.WL_88B, rbls: ["3319"] },
-    { line: LineKey.WL_84A, rbls: ["3365"] },
+    { line: LineKey.WL_84A, rbls: ["3365", "3357"] },
 ];
 STATION_TO_LINES[StationKey.CTS] = [
     { line: LineKey.WL_88A, rbls: ["3320", "3323"] },
